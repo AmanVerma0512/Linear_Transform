@@ -13,6 +13,7 @@ import yaml
 import boto3
 import streamlit as st
 import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 st.set_page_config(layout="wide")
 st.title("Signal Comparison")
@@ -439,7 +440,27 @@ if flag == True:
             st.write("C. Jitter")
             st.write("Per Rep Jitter Dictionary: " + str(formscore2['subScores']['jitter']['meta']['per rep jitter dictionary']))
 
-    
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',
+               "https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+
+    cred = {
+    "type": st.secrets["type_s"],
+    "project_id": st.secrets["project_id_s"],
+    "private_key_id": st.secrets["private_key_id_s"],
+    "private_key": st.secrets["private_key_s"],
+    "client_email": st.secrets["client_email_s"],
+    "client_id": st.secrets["client_id_s"],
+    "auth_uri": st.secrets["auth_uri_s"],
+    "token_uri": st.secrets["token_uri_s"],
+    "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url_s"],
+    "client_x509_cert_url": st.secrets["client_x509_cert_url_s"]}
+
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(cred, scope)
+
+    client = gspread.authorize(credentials)
+    # Open the spreadhseet
+    sheet_fd = client.open("DFIA").worksheet("Linear_Transform")
+        
     st.subheader("Linear Adjustment")
 
     param_fields = ["explosiveness","power","Net Power Score","Area Stamina Score","Net Stamina Score","sudden release","tempo","jitter"]
@@ -487,3 +508,5 @@ if flag == True:
             else:
                 st.write("Value of A is: " + str(A))
                 st.write("Value of B is: " + str(B))
+                sheet_fd.append_row([signal_a,signal_b,check_parameter,y_1_input,y_2_input,signal_1_val,signal_2_val,A,B],value_input_option="USER_ENTERED")
+                st.write("Values are stored!")    
