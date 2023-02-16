@@ -511,7 +511,7 @@ def get_score(y,h_params,header):
                     j += 1
                 if j != 0 and y[i - j + 1] - y[i] > delta:
                     sud.append(i)
-            self.currScore = Policy.rep_and_threshold(self.y, sud, self.config['policy_threshold']) * 100
+            self.currScore = Policy.rep_and_threshold(self.y, sud, 0) * 100
             self.currScore = clip100(self.currScore)
             meta = {}
             meta["max_to_fall_ratio"] = max_to_fall_ratio
@@ -541,9 +541,9 @@ def get_score(y,h_params,header):
             return res
 
     class SuddenReleaseFactory():
-        def configuredObject(y,configs):
-            suddenRelease=SuddenRelease(y,configs)
-            return suddenRelease
+            def configuredObject(y,configs):
+                suddenRelease=SuddenRelease(y,configs)
+                return suddenRelease
         
     class AggFormScore(Score):
         scoreType = "formscore"
