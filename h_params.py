@@ -1,8 +1,7 @@
 header={
     "subScores":True,
     "coachingTip":True,
-    "score":True,
-    "meta":True
+    "score":True
 }
 
 h_params1={
@@ -54,7 +53,8 @@ h_params1={
                             "w_sudden release": 1,
                             "sudden release": {
                                 "max_to_fall_ratio": 0.4,
-                                "fall_time": 4
+                                "fall_time": 4,
+                                "policy_threshold":2
                             },
                             "tempo":{
                                 "scipyPeaks":False,
@@ -104,7 +104,7 @@ h_params1={
                             },
                             "area stamina":
                             {
-                                "referenceFactor":1.4,
+                                "referenceFactor":0.8,
                                 "peaks":{
                                 "scipyPeaks":False,
                                 "intervalPeaks":None
