@@ -1,5 +1,5 @@
 import numpy as np
-from FeatureExtraction import mode
+from FeatureExtraction import *
 import random
 from utils import *
 
@@ -14,16 +14,29 @@ def stop(y):
 
 
 # Decay signal
-def decay(y,decay=0.5):
-    m=mode(y) - max(y)*0.3
-    for i in range(len(y)):
-        if y[i]>m:
-            y[i] *= (2.718 ** (-i * 0.0001 * decay))
-    return y
+def decay(y2,decay=0.5):
+    m=mode(y2)
+    print(m)
+
+    start=peaks(y2)[0]
+    # m=0
+    y3=[]
+    above=0
+    below=0
+    for ix in range(len(y2)):
+        i =  (ix - start) / len(y)
+        i*=i
+        if y2[ix] * (2.718 ** (-i * 0.1 * decay))>m:
+            y3 += [y2[ix] * (2.718 ** (-i * 0.1 * decay))]
+            above+=1
+        else:
+            y3+=[y2[ix]]
+            below+=1
+    print(below,above)
+    return y3
 
 # Noisy signal
 def noisy(y):
-    import random
     return [y[i] + random.random() * 0.2 * max(y) if y[i] > max(y) * (1 / 12) else y[i] for i in range(len(y))]
 
 # Sudden release
